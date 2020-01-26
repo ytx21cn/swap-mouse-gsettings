@@ -3,32 +3,36 @@
 EXEC := gsettings
 SCHEMA := org.gnome.desktop.peripherals.mouse left-handed
 
-mouse_mode = $(subst true, left, $(subst false, right,\
-	$(shell $(EXEC) get $(SCHEMA))))
+GET_SCHEMA := $(EXEC) get $(SCHEMA)
+RESET_SCHEMA := $(EXEC) reset $(SCHEMA)
+SET_SCHEMA_LEFT := $(EXEC) set $(SCHEMA) true
+SET_SCHEMA_RIGHT := $(EXEC) set $(SCHEMA) false
 
-to_upper = $(shell echo $(1) | tr a-z A-Z)
-feedback = @echo "Your mouse is now in"\
-	$(call to_upper, $(1)-handed)" mode."
+TO_UPPER := tr a-z A-Z
+GET_MOUSE_MODE := $(GET_SCHEMA) | sed s/true/left/g \
+	| sed s/false/right/g | $(TO_UPPER)
+FEEDBACK := @echo "Your mouse is now in `echo \`\
+	$(GET_MOUSE_MODE)\`-handed | $(TO_UPPER)` mode."
 
 .PHONY: all
 all: reset
 
 .PHONY: reset
 reset:
-	$(EXEC) reset $(SCHEMA)
-	$(call feedback, $(mouse_mode))
+	$(RESET_SCHEMA)
+	$(FEEDBACK)
 
 .PHONY: get
 get:
-	$(EXEC) get $(SCHEMA)
-	$(call feedback, $(mouse_mode))
+	$(GET_SCHEMA)
+	$(FEEDBACK)
 
 .PHONY: left
 left:
-	$(EXEC) set $(SCHEMA) true
-	$(call feedback, $@)
+	$(SET_SCHEMA_LEFT)
+	$(FEEDBACK)
 
 .PHONY: right
 right:
-	$(EXEC) set $(SCHEMA) false
-	$(call feedback, $@)
+	$(SET_SCHEMA_RIGHT)
+	$(FEEDBACK)
