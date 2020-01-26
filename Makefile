@@ -8,9 +8,9 @@ RESET_SCHEMA := $(EXEC) reset $(SCHEMA)
 SET_SCHEMA_LEFT := $(EXEC) set $(SCHEMA) true
 SET_SCHEMA_RIGHT := $(EXEC) set $(SCHEMA) false
 
-TO_UPPER := tr a-z A-Z
+TO_UPPER := tr [:lower:] [:upper:]
 GET_MOUSE_MODE := $(GET_SCHEMA) | sed s/true/left/g \
-	| sed s/false/right/g | $(TO_UPPER)
+	| sed s/false/right/g
 FEEDBACK := @echo "Your mouse is now in `echo \`\
 	$(GET_MOUSE_MODE)\`-handed | $(TO_UPPER)` mode."
 
