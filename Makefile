@@ -6,18 +6,18 @@ SCHEMA := org.gnome.desktop.peripherals.mouse left-handed
 
 all: reset
 
-.PHONY reset
+.PHONY: reset
 reset:
 	$(EXEC) reset $(SCHEMA)
 
-.PHONY get
+.PHONY: get
 get:
 	$(EXEC) get $(SCHEMA)
 
-.PHONY right
-right:
-	$(EXEC) set $(SCHEMA) false
-
-.PHONY left
+.PHONY: left
 left:
 	$(EXEC) set $(SCHEMA) true
+
+.PHONY: right
+right:
+	$(EXEC) set $(SCHEMA) false
