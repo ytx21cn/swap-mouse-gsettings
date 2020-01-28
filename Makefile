@@ -15,10 +15,8 @@ GET_MOUSE_MODE := $(GET_SCHEMA) | sed s/true/left/g \
 FEEDBACK := @echo "Your mouse is now in `echo \`\
 	$(GET_MOUSE_MODE)\`-handed | $(TO_UPPER)` mode."
 
-CURRENT_DIR := $(realpath .)
-MAKEFILE_NAME := $(CURRENT_DIR)/Makefile
-
-MAKEFILE_ALIAS := alias mouse='make -f $(MAKEFILE_NAME)'
+MAKEFILE_PATH := $(realpath .)/Makefile
+MAKEFILE_ALIAS := alias mouse='make -f $(MAKEFILE_PATH)'
 BASHRC_FILE := ~/.bashrc
 BASHRC_SECTION_HEADER := \# Mouse mode setting utility
 
@@ -51,8 +49,8 @@ install: clean
 clean:
 	@echo 'Removing existing mouse setting utility...'
 	sed -i '/$(BASHRC_SECTION_HEADER)/d' $(BASHRC_FILE)
-	$(eval MAKEFILE_ALIAS_LINE = $(subst /,\/,$(MAKEFILE_ALIAS)))
-	sed -i "/$(MAKEFILE_ALIAS_LINE)/d" $(BASHRC_FILE)
+	$(eval makefile_alias_regex = $(subst /,\/,$(MAKEFILE_ALIAS)))
+	sed -i "/$(makefile_alias_regex)/d" $(BASHRC_FILE)
 	@echo 'Mouse setting utility removed.'
 	$(STRIP_EXTRA_BLANK_LINES)
 
