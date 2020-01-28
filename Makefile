@@ -28,6 +28,12 @@ define HELP
 @echo 'Reset mouse mode: `mouse reset`'
 endef
 
+define STRIP_EXTRA_BLANK_LINES
+$(eval tempfile = $(shell mktemp))
+@cat -s $(BASHRC_FILE) > $(tempfile)
+@cat $(tempfile) > $(BASHRC_FILE)
+endef
+
 .PHONY: all
 all: reset
 
@@ -37,6 +43,7 @@ install: clean
 	@echo '' >> $(BASHRC_FILE)
 	@echo "$(BASHRC_SECTION_HEADER)" >> $(BASHRC_FILE)
 	@echo "$(MAKEFILE_ALIAS)" >> $(BASHRC_FILE)
+	$(STRIP_EXTRA_BLANK_LINES)
 	@echo 'Installed mouse setting utility.'
 	$(HELP)
 
@@ -47,6 +54,7 @@ clean:
 	$(eval MAKEFILE_ALIAS_LINE = $(subst /,\/,$(MAKEFILE_ALIAS)))
 	sed -i "/$(MAKEFILE_ALIAS_LINE)/d" $(BASHRC_FILE)
 	@echo 'Mouse setting utility removed.'
+	$(STRIP_EXTRA_BLANK_LINES)
 
 .PHONY: reset
 reset:
